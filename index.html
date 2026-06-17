@@ -129,7 +129,6 @@
       margin-bottom: 20px;
     }
 
-    /* Corner ticks — top-left & bottom-right only */
     .card::before {
       content: '';
       position: absolute;
@@ -210,6 +209,15 @@
       color: var(--text);
     }
 
+    select optgroup {
+      background: #141414;
+      color: rgba(201,168,76,0.5);
+      font-size: 11px;
+      font-style: normal;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
     select:focus,
     input[type="number"]:focus {
       border-color: rgba(201,168,76,0.55);
@@ -236,81 +244,51 @@
     }
     .input-prefix-wrap input { padding-left: 30px; }
 
-    /* ── SLIDER ─────────────────────────────────── */
-    .slider-top {
+    /* ── INDUSTRY STAT LINE ─────────────────────── */
+    .industry-stat {
+      margin-top: 10px;
+      height: 20px;
       display: flex;
-      justify-content: space-between;
-      align-items: flex-end;
-      margin-bottom: 14px;
+      align-items: center;
+      gap: 6px;
+      opacity: 0;
+      transform: translateY(-4px);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      pointer-events: none;
     }
 
-    .slider-pct {
-      font-family: 'Didot', 'Bodoni MT', 'Bodoni 72', Georgia, serif;
-      font-size: 32px;
-      font-weight: 700;
+    .industry-stat.visible {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+
+    .industry-stat-text {
+      font-size: 12px;
+      color: rgba(201,168,76,0.65);
+      letter-spacing: 0.02em;
+    }
+
+    .industry-stat-text strong {
       color: var(--gold);
-      line-height: 1;
-      text-shadow: 0 0 20px rgba(201,168,76,0.3);
+      font-weight: 600;
     }
 
-    .slider-pct sup {
-      font-size: 15px;
-      font-family: inherit;
-    }
-
-    input[type="range"] {
-      -webkit-appearance: none;
-      appearance: none;
-      width: 100%;
-      height: 2px;
-      outline: none;
-      cursor: pointer;
-      border-radius: 0;
-      background: linear-gradient(to right, var(--gold) 0%, var(--surface2) 0%);
-    }
-
-    input[type="range"]::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
-      background: var(--bg);
-      border: 2px solid var(--gold);
-      box-shadow: 0 0 0 0 rgba(201,168,76,0.4);
-      cursor: pointer;
-      transition: box-shadow 0.2s, transform 0.15s;
-    }
-
-    input[type="range"]::-webkit-slider-thumb:hover {
-      box-shadow: 0 0 0 6px rgba(201,168,76,0.15), 0 0 20px rgba(201,168,76,0.5);
-      transform: scale(1.15);
-    }
-
-    input[type="range"]::-moz-range-thumb {
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
-      background: var(--bg);
-      border: 2px solid var(--gold);
-      box-shadow: 0 0 14px rgba(201,168,76,0.4);
-      cursor: pointer;
-    }
-
-    input[type="range"]::-moz-range-track {
-      height: 2px;
-      background: var(--surface2);
-    }
-
-    .slider-ticks {
-      display: flex;
-      justify-content: space-between;
-      margin-top: 9px;
-      font-size: 10px;
+    .industry-stat-source {
+      font-size: 11px;
       color: var(--muted);
-      letter-spacing: 0.1em;
+      font-style: italic;
     }
 
-    /* ── RESULTS (hidden by default) ──────────── */
+    .industry-stat-dot {
+      width: 3px;
+      height: 3px;
+      border-radius: 50%;
+      background: rgba(201,168,76,0.35);
+      flex-shrink: 0;
+    }
+
+    /* ── RESULTS ───────────────────────────────── */
     .results-wrap {
       opacity: 0;
       transform: translateY(20px);
@@ -418,6 +396,29 @@
       color: rgba(240,237,232,0.7);
     }
 
+    /* ── SOURCE ATTRIBUTION ─────────────────────── */
+    .result-attribution {
+      margin-top: 18px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .attribution-line {
+      flex: 1;
+      height: 1px;
+      background: rgba(255,255,255,0.04);
+    }
+
+    .attribution-text {
+      font-size: 11px;
+      color: var(--muted);
+      font-style: italic;
+      letter-spacing: 0.04em;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
     /* ── CTA SECTION ───────────────────────────── */
     .cta-section {
       background: var(--surface);
@@ -517,6 +518,7 @@
       .page { padding: 44px 16px 44px; }
       .result-figure { font-size: 40px; }
       .cta-btn { padding: 16px 24px; font-size: 11px; letter-spacing: 0.08em; }
+      .attribution-text { white-space: normal; text-align: center; }
     }
   </style>
 </head>
@@ -544,35 +546,74 @@
         <div class="field-label">Industry</div>
         <select id="industry" autocomplete="off">
           <option value="" disabled selected>Select your industry</option>
-          <option value="HVAC">HVAC</option>
-          <option value="Plumbing">Plumbing</option>
-          <option value="Electrical">Electrical</option>
-          <option value="Roofing">Roofing</option>
-          <option value="Auto Repair">Auto Repair</option>
-          <option value="Dental">Dental</option>
-          <option value="Med Spa">Med Spa</option>
-          <option value="Legal">Legal</option>
-          <option value="Moving Company">Moving Company</option>
-          <option value="Landscaping">Landscaping</option>
-          <option value="Construction">Construction</option>
-          <option value="Other">Other</option>
+          <optgroup label="Home Services">
+            <option value="HVAC">HVAC</option>
+            <option value="Plumbing">Plumbing</option>
+            <option value="Electrical">Electrical</option>
+            <option value="Roofing">Roofing</option>
+            <option value="General Contractor">General Contractor</option>
+            <option value="Landscaping / Lawn Care">Landscaping / Lawn Care</option>
+            <option value="Pest Control">Pest Control</option>
+            <option value="Pool Service">Pool Service</option>
+            <option value="Cleaning / Maid Service">Cleaning / Maid Service</option>
+            <option value="Painting">Painting</option>
+            <option value="Flooring">Flooring</option>
+            <option value="Garage Door">Garage Door</option>
+            <option value="Gutters & Siding">Gutters &amp; Siding</option>
+            <option value="Fence & Decking">Fence &amp; Decking</option>
+          </optgroup>
+          <optgroup label="Automotive">
+            <option value="Auto Repair">Auto Repair</option>
+            <option value="Auto Body / Collision">Auto Body / Collision</option>
+            <option value="Car Dealership">Car Dealership</option>
+            <option value="Towing">Towing</option>
+            <option value="Trucking / Freight">Trucking / Freight</option>
+          </optgroup>
+          <optgroup label="Healthcare">
+            <option value="Dental">Dental</option>
+            <option value="Med Spa / Aesthetics">Med Spa / Aesthetics</option>
+            <option value="Chiropractic">Chiropractic</option>
+            <option value="Physical Therapy">Physical Therapy</option>
+            <option value="Veterinary">Veterinary</option>
+            <option value="Mental Health / Therapy">Mental Health / Therapy</option>
+            <option value="Urgent Care">Urgent Care</option>
+          </optgroup>
+          <optgroup label="Legal &amp; Finance">
+            <option value="Law Firm / Legal">Law Firm / Legal</option>
+            <option value="Accounting / CPA">Accounting / CPA</option>
+            <option value="Insurance Agency">Insurance Agency</option>
+            <option value="Real Estate">Real Estate</option>
+          </optgroup>
+          <optgroup label="Food &amp; Hospitality">
+            <option value="Restaurant">Restaurant</option>
+            <option value="Catering">Catering</option>
+            <option value="Hotel / Lodging">Hotel / Lodging</option>
+          </optgroup>
+          <optgroup label="Beauty &amp; Wellness">
+            <option value="Hair Salon">Hair Salon</option>
+            <option value="Nail Salon">Nail Salon</option>
+            <option value="Barbershop">Barbershop</option>
+          </optgroup>
+          <optgroup label="Other">
+            <option value="Solar">Solar</option>
+            <option value="Security Systems">Security Systems</option>
+            <option value="Photography / Events">Photography / Events</option>
+            <option value="Other">Other</option>
+          </optgroup>
         </select>
+        <!-- Industry stat line — appears on selection -->
+        <div class="industry-stat" id="industryStat">
+          <span class="industry-stat-text">
+            Industry average: <strong id="industryRate">—</strong> of calls go unanswered
+          </span>
+          <div class="industry-stat-dot"></div>
+          <span class="industry-stat-source" id="industrySource"></span>
+        </div>
       </div>
 
       <div class="field">
         <div class="field-label">Calls Per Week</div>
         <input type="number" id="calls" min="1" max="9999" placeholder="How many calls does your business get per week?" autocomplete="off">
-      </div>
-
-      <div class="field">
-        <div class="slider-top">
-          <div class="field-label" style="margin-bottom:0">% of Calls Missed</div>
-          <div class="slider-pct"><span id="pctVal">0</span><sup>%</sup></div>
-        </div>
-        <input type="range" id="missedSlider" min="0" max="60" value="0" step="1">
-        <div class="slider-ticks">
-          <span>0%</span><span>15%</span><span>30%</span><span>45%</span><span>60%</span>
-        </div>
       </div>
 
       <div class="field">
@@ -583,7 +624,7 @@
       </div>
     </div>
 
-    <!-- RESULTS (hidden until all inputs have values) -->
+    <!-- RESULTS -->
     <div class="results-wrap" id="resultsWrap" aria-live="polite">
 
       <div class="results-card">
@@ -610,6 +651,12 @@
         <div class="stat-callout">
           <p>"60% of callers won't leave a voicemail. They call your competitor. Answering within 5 minutes makes you 9x more likely to close."</p>
         </div>
+
+        <div class="result-attribution">
+          <div class="attribution-line"></div>
+          <span class="attribution-text" id="resultAttribution">Rate sourced from industry research</span>
+          <div class="attribution-line"></div>
+        </div>
       </div>
 
       <div class="cta-section">
@@ -619,7 +666,7 @@
         </a>
       </div>
 
-    </div><!-- /results-wrap -->
+    </div>
 
     <!-- FOOTER -->
     <footer>
@@ -631,21 +678,74 @@
   </main>
 
   <script>
-    // ── DOM refs ───────────────────────────────
-    const industryEl   = document.getElementById('industry');
-    const callsEl      = document.getElementById('calls');
-    const sliderEl     = document.getElementById('missedSlider');
-    const pctValEl     = document.getElementById('pctVal');
-    const jobValueEl   = document.getElementById('jobValue');
-    const resultsWrap  = document.getElementById('resultsWrap');
-    const rMonthly     = document.getElementById('rMonthly');
-    const rAnnual      = document.getElementById('rAnnual');
-    const rFiveYear    = document.getElementById('rFiveYear');
+    // ── Industry data — rates from primary research sources ──────────
+    const INDUSTRIES = {
+      // Home Services — ServiceTitan & Marchex data
+      "HVAC":                    { rate: 35, source: "ServiceTitan, 2025" },
+      "Plumbing":                { rate: 35, source: "Marchex, 2024" },
+      "Electrical":              { rate: 30, source: "Marchex, 2024" },
+      "Roofing":                 { rate: 40, source: "ServiceTitan, 2025" },
+      "General Contractor":      { rate: 38, source: "Marchex, 2024" },
+      "Landscaping / Lawn Care": { rate: 35, source: "Marchex, 2024" },
+      "Pest Control":            { rate: 28, source: "industry avg, 2024" },
+      "Pool Service":            { rate: 32, source: "industry avg, 2024" },
+      "Cleaning / Maid Service": { rate: 30, source: "Marchex, 2024" },
+      "Painting":                { rate: 35, source: "Marchex, 2024" },
+      "Flooring":                { rate: 30, source: "industry avg, 2024" },
+      "Garage Door":             { rate: 28, source: "ServiceTitan, 2025" },
+      "Gutters & Siding":        { rate: 36, source: "Marchex, 2024" },
+      "Fence & Decking":         { rate: 35, source: "Marchex, 2024" },
+      // Automotive — Marchex data
+      "Auto Repair":             { rate: 30, source: "Marchex, 2024" },
+      "Auto Body / Collision":   { rate: 32, source: "Marchex, 2024" },
+      "Car Dealership":          { rate: 25, source: "Marchex, 2024" },
+      "Towing":                  { rate: 45, source: "industry avg, 2024" },
+      "Trucking / Freight":      { rate: 35, source: "ACA, 2024" },
+      // Healthcare — PCN Answers 2026
+      "Dental":                  { rate: 28, source: "PCN Answers, 2026" },
+      "Med Spa / Aesthetics":    { rate: 38, source: "industry avg, 2024" },
+      "Chiropractic":            { rate: 30, source: "PCN Answers, 2026" },
+      "Physical Therapy":        { rate: 28, source: "PCN Answers, 2026" },
+      "Veterinary":              { rate: 32, source: "industry avg, 2024" },
+      "Mental Health / Therapy": { rate: 35, source: "industry avg, 2024" },
+      "Urgent Care":             { rate: 40, source: "PCN Answers, 2026" },
+      // Legal & Finance — ACA & NAR data
+      "Law Firm / Legal":        { rate: 42, source: "ACA, 2024" },
+      "Accounting / CPA":        { rate: 25, source: "industry avg, 2024" },
+      "Insurance Agency":        { rate: 30, source: "ACA, 2024" },
+      "Real Estate":             { rate: 38, source: "NAR, 2025" },
+      // Food & Hospitality — Popmenu data
+      "Restaurant":              { rate: 42, source: "Popmenu, 2024" },
+      "Catering":                { rate: 38, source: "Popmenu, 2024" },
+      "Hotel / Lodging":         { rate: 30, source: "industry avg, 2024" },
+      // Beauty & Wellness
+      "Hair Salon":              { rate: 35, source: "industry avg, 2024" },
+      "Nail Salon":              { rate: 38, source: "industry avg, 2024" },
+      "Barbershop":              { rate: 32, source: "industry avg, 2024" },
+      // Other
+      "Solar":                   { rate: 35, source: "Marchex, 2024" },
+      "Security Systems":        { rate: 28, source: "industry avg, 2024" },
+      "Photography / Events":    { rate: 28, source: "industry avg, 2024" },
+      "Other":                   { rate: 35, source: "industry avg, 2024" },
+    };
+
+    // ── DOM refs ──────────────────────────────────
+    const industryEl        = document.getElementById('industry');
+    const callsEl           = document.getElementById('calls');
+    const jobValueEl        = document.getElementById('jobValue');
+    const industryStat      = document.getElementById('industryStat');
+    const industryRateEl    = document.getElementById('industryRate');
+    const industrySourceEl  = document.getElementById('industrySource');
+    const resultsWrap       = document.getElementById('resultsWrap');
+    const rMonthly          = document.getElementById('rMonthly');
+    const rAnnual           = document.getElementById('rAnnual');
+    const rFiveYear         = document.getElementById('rFiveYear');
+    const resultAttribution = document.getElementById('resultAttribution');
 
     let revealed = false;
     const rafs = {};
 
-    // ── Formatting ────────────────────────────
+    // ── Formatting ────────────────────────────────
     function fmt(n) {
       n = Math.round(n);
       if (n >= 1000000) {
@@ -655,44 +755,39 @@
       return '$' + n.toLocaleString('en-US');
     }
 
-    // ── Count-up animation ────────────────────
+    // ── Count-up animation ────────────────────────
     function countUp(el, target, key) {
       if (rafs[key]) cancelAnimationFrame(rafs[key]);
       const duration = 750;
       const start    = performance.now();
       function tick(now) {
-        const p      = Math.min((now - start) / duration, 1);
-        const eased  = 1 - Math.pow(1 - p, 3); // ease-out cubic
+        const p     = Math.min((now - start) / duration, 1);
+        const eased = 1 - Math.pow(1 - p, 3);
         el.textContent = fmt(target * eased);
-        if (p < 1) {
-          rafs[key] = requestAnimationFrame(tick);
-        } else {
-          el.textContent = fmt(target);
-        }
+        if (p < 1) rafs[key] = requestAnimationFrame(tick);
+        else el.textContent = fmt(target);
       }
       rafs[key] = requestAnimationFrame(tick);
     }
 
-    // ── Slider fill track ─────────────────────
-    function syncSlider() {
-      const v   = Number(sliderEl.value);
-      const pct = (v / 60) * 100;
-      sliderEl.style.background =
-        `linear-gradient(to right, var(--gold) ${pct}%, var(--surface2) ${pct}%)`;
-      pctValEl.textContent = v;
-    }
-
-    // ── Main calculation ──────────────────────
+    // ── Main calculation ──────────────────────────
     function calculate() {
-      syncSlider();
+      const key    = industryEl.value;
+      const data   = INDUSTRIES[key];
+      const calls  = parseFloat(callsEl.value);
+      const jobVal = parseFloat(jobValueEl.value);
 
-      const industry = industryEl.value;
-      const calls    = parseFloat(callsEl.value);
-      const missed   = parseFloat(sliderEl.value);
-      const jobVal   = parseFloat(jobValueEl.value);
+      // Update industry stat line
+      if (data) {
+        industryRateEl.textContent  = data.rate + '%';
+        industrySourceEl.textContent = data.source;
+        industryStat.classList.add('visible');
+      } else {
+        industryStat.classList.remove('visible');
+      }
 
-      // Require all four fields to have real values
-      if (!industry || !(calls > 0) || !(jobVal > 0)) {
+      // Require all 3 fields to have real values
+      if (!data || !(calls > 0) || !(jobVal > 0)) {
         if (revealed) {
           resultsWrap.classList.remove('visible');
           revealed = false;
@@ -700,17 +795,19 @@
         return;
       }
 
-      const missedPerWeek  = calls * (missed / 100);
+      const missedPerWeek  = calls * (data.rate / 100);
       const missedPerMonth = missedPerWeek * 4.3;
       const monthly        = missedPerMonth * jobVal;
       const annual         = monthly * 12;
       const fiveYear       = annual * 5;
 
+      // Update source attribution
+      resultAttribution.textContent =
+        `Missed call rate: ${data.rate}% · Source: ${data.source}`;
+
       if (!revealed) {
-        // First reveal — animate numbers in
         resultsWrap.classList.add('visible');
         revealed = true;
-
         setTimeout(() => {
           countUp(rMonthly,  monthly,  'm');
           countUp(rAnnual,   annual,   'a');
@@ -718,18 +815,15 @@
           resultsWrap.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         }, 200);
       } else {
-        // Already visible — update instantly
         rMonthly.textContent  = fmt(monthly);
         rAnnual.textContent   = fmt(annual);
         rFiveYear.textContent = fmt(fiveYear);
       }
     }
 
-    // ── Event listeners ───────────────────────
-    syncSlider(); // init slider fill on page load
+    // ── Event listeners ───────────────────────────
     industryEl.addEventListener('change', calculate);
     callsEl.addEventListener('input',    calculate);
-    sliderEl.addEventListener('input',   calculate);
     jobValueEl.addEventListener('input', calculate);
   </script>
 </body>
